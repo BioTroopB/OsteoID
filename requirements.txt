@@ -1,10 +1,9 @@
 streamlit>=1.38.0
 trimesh[all]>=4.0.8
-numpy>=1.26
+numpy>=1.26,<2.0
 scipy>=1.13
 scikit-learn>=1.5
 plotly>=5.22
-open3d>=0.18.0
 pandas
 pyyaml
-imbalanced-learn
+imbalanced-learn>=0.12
