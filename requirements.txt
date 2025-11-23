@@ -5,4 +5,5 @@ plotly==5.24.0
 scikit-learn==1.5.2
 scipy==1.14.1
 numpy==2.1.2
-imblearn==0.12.4
+imbalanced-learn==0.12.4
+
