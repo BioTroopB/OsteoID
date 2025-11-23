@@ -8,7 +8,7 @@ from scipy.spatial import procrustes
 
 st.set_page_config(page_title="OsteoID.ai", layout="centered")
 st.title("OsteoID.ai")
-st.markdown("**Primate Pectoral Girdle Classifier** — Kevin P. Klier | University at Buffalo BHEML")
+st.markdown("**Primate Shoulder Bone Classifier** — Kevin P. Klier")
 st.markdown("Upload any raw .ply file — no landmarking required · Auto-landmarking via ICP")
 
 bone = st.selectbox("Bone type (or Auto-detect)", ["Auto", "clavicle", "scapula", "humerus"])
@@ -96,5 +96,6 @@ else:
     st.info("Upload a raw .ply file to see the magic happen")
 
 st.markdown("---")
-st.markdown("Kevin P. Klier | University at Buffalo BHEML | 2023")
-st.markdown("Non-human primates only | 555 specimens | Approved by Dr. Noreen von Cramon-Taubadel")
+st.markdown("Kevin P. Klier | 2023")
+st.markdown("Based on M.A. research at University at Buffalo under advisement of Dr. Noreen von Cramon-Taubadel")
+st.markdown("Non-human primates only")
