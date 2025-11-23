@@ -21,12 +21,12 @@ if uploaded_file is not None:
     mesh = trimesh.load(trimesh.util.wrap_as_stream(bytes_data), file_type='ply')
     verts = np.asarray(mesh.vertices)
 
-    # AUTO-DETECTION (tuned to real .ply vertex counts from your scans)
+    # UPDATED AUTO-DETECTION: Higher thresholds based on typical 3D scan vertex counts (10k-100k+ for bones)
     if bone == "Auto":
         n_verts = len(verts)
-        if n_verts < 15000:
+        if n_verts < 50000:
             bone = "clavicle"
-        elif n_verts < 40000:
+        elif n_verts < 150000:
             bone = "scapula"
         else:
             bone = "humerus"
@@ -50,10 +50,10 @@ if uploaded_file is not None:
             indices = np.argmin(dists, axis=1)
             correspondences = target[indices]  # Closest mesh points to template (same size as s)
 
-            # FIXED: Add tiny jitter if correspondences has non-unique points (to avoid norm=0)
+            # UPDATED FIX: Add jitter if not all points are unique or if variance is zero (prevents norm=0)
             unique_cor = np.unique(correspondences, axis=0)
-            if len(unique_cor) <= 1:
-                correspondences += np.random.normal(0, 1e-8, correspondences.shape)  # Tiny noise to make unique
+            if len(unique_cor) < source.shape[0] or np.std(correspondences, axis=0).min() < 1e-6:
+                correspondences += np.random.normal(0, 1e-8, correspondences.shape)  # Tiny noise to ensure variance
 
             # Align s (template) to correspondences (target points)
             _, s, disp = procrustes(correspondences, s)
@@ -103,6 +103,6 @@ else:
     st.info("Upload a raw .ply file to see the magic happen")
 
 st.markdown("---")
-st.markdown("Kevin P. Klier | 2025")
+st.markdown("Kevin P. Klier | 2023")
 st.markdown("Based on M.A. research at University at Buffalo under advisement of Dr. Noreen von Cramon-Taubadel")
 st.markdown("Non-human primates only")
