@@ -96,6 +96,7 @@ else:
     st.info("Upload a raw .ply file to see the magic happen")
 
 st.markdown("---")
-st.markdown("Kevin P. Klier | 2023")
+st.markdown("Kevin P. Klier | 2025")
 st.markdown("Based on M.A. research at University at Buffalo under advisement of Dr. Noreen von Cramon-Taubadel")
 st.markdown("Non-human primates only")
+
