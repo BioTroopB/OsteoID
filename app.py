@@ -11,7 +11,7 @@ import os
 # CONFIG
 st.set_page_config(page_title="OsteoID.ai", layout="centered")
 st.title("🦴 OsteoID.ai")
-st.markdown("**Primate Pectoral Girdle Classifier** — Kevin P. Klier")
+st.markdown("**Primate Shoulder Bone Classifier** — Kevin P. Klier")
 st.markdown("*Upload any raw `.ply` file — no landmarking required · Auto-landmarking via ICP*")
 
 # CACHING
@@ -130,10 +130,10 @@ else:
     st.markdown(
         """
         **Supported bones**: Clavicle · Scapula · Humerus  
-        **Taxa included**: Cercopithecus, Gorilla, Hylobates, Macaca, Pan, Pongo, Trachypithecus (n=555)  
-        Trained on landmark data from von Cramon-Taubadel Lab · Fully automated ICP alignment
+        **Taxa included**: Cercopithecus, Gorilla, Hylobates, Macaca, Pan, Pongo, Trachypithecus  
+        Fully automated ICP alignment
         """
     )
 
 st.markdown("---")
-st.markdown("© 2023–2025 Kevin P. Klier | Based on M.A. research at University at Buffalo BHEML under Dr. Noreen von Cramon-Taubadel | Supported by NSF")
+st.markdown("© 2023–2025 Kevin P. Klier | Based on M.A. research at University at Buffalo BHEML under Dr. Noreen von Cramon-Taubadel")
