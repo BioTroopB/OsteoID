@@ -21,14 +21,18 @@ if uploaded_file is not None:
     mesh = trimesh.load(trimesh.util.wrap_as_stream(bytes_data), file_type='ply')
     verts = np.asarray(mesh.vertices)
 
-    # UPDATED AUTO-DETECTION: Higher thresholds based on typical 3D scan vertex counts (10k-100k+ for bones)
+    # UPDATED: Pre-center the mesh to match GPA data (fixes alignment bias)
+    centroid = np.mean(verts, axis=0)
+    verts -= centroid
+
+    # UPDATED AUTO-DETECTION: Higher thresholds for typical scan densities (adjust based on your files)
     if bone == "Auto":
         n_verts = len(verts)
-        if n_verts < 50000:
+        if n_verts < 60000:  # Clavicles often lower density
             bone = "clavicle"
-        elif n_verts < 150000:
+        elif n_verts < 150000:  # Scapulae medium
             bone = "scapula"
-        else:
+        else:  # Humeri higher
             bone = "humerus"
 
     st.write(f"**Processing as {bone.capitalize()}** ({len(verts):,} vertices)")
@@ -42,7 +46,7 @@ if uploaded_file is not None:
     pca = pickle.load(open(f"models/{bone}/pca_{bone}.pkl", "rb"))
 
     # FIXED ICP: Align sparse mean_shape (template) to dense sample_points (mesh)
-    def simple_icp(source, target, max_iterations=30, threshold=1e-6):
+    def simple_icp(source, target, max_iterations=50, threshold=1e-6):  # Increased iterations for better convergence
         s = source.copy()  # Start with sparse template
         prev_disp = np.inf
         for _ in range(max_iterations):
@@ -50,10 +54,9 @@ if uploaded_file is not None:
             indices = np.argmin(dists, axis=1)
             correspondences = target[indices]  # Closest mesh points to template (same size as s)
 
-            # UPDATED FIX: Add jitter if not all points are unique or if variance is zero (prevents norm=0)
-            unique_cor = np.unique(correspondences, axis=0)
-            if len(unique_cor) < source.shape[0] or np.std(correspondences, axis=0).min() < 1e-6:
-                correspondences += np.random.normal(0, 1e-8, correspondences.shape)  # Tiny noise to ensure variance
+            # UPDATED FIX: Jitter if low variance or duplicates (prevents norm=0 and improves robustness)
+            if np.std(correspondences, axis=0).min() < 1e-5 or len(np.unique(correspondences, axis=0)) < source.shape[0]:
+                correspondences += np.random.normal(0, 1e-8, correspondences.shape)  # Tiny noise to ensure variance/uniqueness
 
             # Align s (template) to correspondences (target points)
             _, s, disp = procrustes(correspondences, s)
@@ -64,7 +67,7 @@ if uploaded_file is not None:
 
     # Sample points for speed (dense subset of mesh)
     landmark_counts = {"clavicle": 7, "scapula": 13, "humerus": 16}
-    n_samples = min(10000, len(verts))  # Dense sample for accurate matching (up to 10k points)
+    n_samples = min(20000, len(verts))  # UPDATED: Denser sample (up to 20k) for better matching on complex bones
     sample_idx = np.random.choice(len(verts), size=n_samples, replace=False)
     sample_points = verts[sample_idx]
 
@@ -84,6 +87,10 @@ if uploaded_file is not None:
     conf_species = np.max(model_species.predict_proba(features)) * 100
     conf_sex = np.max(model_sex.predict_proba(features)) * 100
     conf_side = np.max(model_side.predict_proba(features)) * 100
+
+    # UPDATED: Low confidence warning (helps diagnose alignment issues)
+    if min(conf_species, conf_sex, conf_side) < 60:
+        st.warning("Low confidence across predictions—alignment may be poor. Try recentering/scaling the .ply in MeshLab or Blender before upload.")
 
     st.success(f"**Bone**: {bone.capitalize()}")
     st.success(f"**Species**: {pred_species} ({conf_species:.1f}% confidence)")
