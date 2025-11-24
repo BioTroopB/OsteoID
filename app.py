@@ -7,6 +7,11 @@ from trimesh.proximity import closest_point
 from scipy.spatial import procrustes
 import os
 
+# Railway health check (responds instantly to proxy pings)
+if st.query_params.get("healthcheck") == "true":
+    st.write("OK")
+    st.stop()
+
 st.set_page_config(page_title="OsteoID.ai", layout="centered")
 st.title("OsteoID.ai")
 st.markdown("**Primate Shoulder Bone Classifier — Beta**  \nKevin P. Klier | University at Buffalo")
