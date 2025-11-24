@@ -34,7 +34,7 @@ def load_morphofile(filepath):
     if current_name and current_lms:
         landmarks.append(np.array(current_lms))
         names.append(current_name)
-    print(f"Loaded {len(names)} specimens from {filepath.name}")
+    print(f"Loaded {len(names)} specimens from {filepath}")
     return names, np.stack(landmarks)
 
 def parse_name(name, bone_keyword):
@@ -45,10 +45,11 @@ def parse_name(name, bone_keyword):
     species = '_'.join(parts[:-3])
     return species, sex, side
 
+# ←←← COLAB-FRIENDLY PATHS ←←←
 bones = {
-    "clavicle": {"file": "MorphoFileClavicle_CLEAN.txt",  "keyword": "clavicle"},
-    "scapula":  {"file": "MorphoFileScapula_CLEAN.txt",  "keyword": "scapula"},
-    "humerus":  {"file": "MorphoFileHumerus_CLEAN.txt",  "keyword": "humerus"}
+    "clavicle": {"file": "/content/MorphoFileClavicle_CLEAN.txt",  "keyword": "clavicle"},
+    "scapula":  {" ordin": "/content/MorphoFileScapula_CLEAN.txt",   "keyword": "scapula"},
+    "humerus":  {"file": "/content/MorphoFileHumerus_CLEAN.txt",   "keyword": "humerus"}
 }
 
 for bone, info in bones.items():
@@ -121,4 +122,4 @@ for bone, info in bones.items():
     print(f"Saved models to {out_dir}\n")
 
 print("ALL DONE — OsteoID.ai is now trained on perfect data.")
-print("Run: streamlit run app.py")
+print("You can now download the entire 'models' folder and push to GitHub.")
