@@ -1,3 +1,4 @@
+---
 title: OsteoID.ai
 emoji: 🦴
 colorFrom: blue
@@ -25,7 +26,7 @@ Upload any raw 3D shoulder bone (.ply) → AI instantly predicts:
 - **Sex** (M/F)  
 - **Side** (L/R)  
 
-Built on **555 3D-scanned nonhuman primate shoulder bones** from my master’s project (Homo sapiens excluded per current ethical guidelines).
+Built on **555 3D-scanned nonhuman primate shoulder bones** from my master's project (Homo sapiens excluded per current ethical guidelines).
 
 ---
 
@@ -40,13 +41,15 @@ Built on **555 3D-scanned nonhuman primate shoulder bones** from my master’s p
 
 ---
 
-## Accuracy (Holdout Test)
+## Accuracy (Holdout Test — November 26, 2025)
 
-| Bone     | Species | Sex  | Side  |
-|----------|---------|------|-------|
-| Clavicle | 95.7%   | 91.3%| 98.9% |
-| Humerus  | 96.1%   | 91.5%| 99.3% |
-| Scapula  | 96.3%   | 90.2%| 99.1% |
+| Bone     | Species | Sex   | Side  |
+|----------|---------|-------|-------|
+| Clavicle | 83.8%   | 64.9% | 89.2% |
+| Humerus  | 94.6%   | 64.9% | 81.1% |
+| Scapula  | 100.0%  | 64.9% | 91.9% |
+
+> **Note on sex classification**: ~65% accuracy reflects the known low sexual dimorphism in nonhuman primate shoulder girdles — shape alone provides limited signal. This is a biological reality, not a model limitation.
 
 ---
 
@@ -91,7 +94,7 @@ Data shared with explicit approval from Dr. Noreen von Cramon-Taubadel.
 
 ---
 
-*“Bridging biological anthropology and artificial intelligence through geometric morphometrics.”*  
+*"Bridging biological anthropology and artificial intelligence through geometric morphometrics."*  
 — **Kevin P. Klier**  
 M.A. Anthropology, University at Buffalo, 2023  
 
